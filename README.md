@@ -1,0 +1,2 @@
+# sui-go-sdk
+
