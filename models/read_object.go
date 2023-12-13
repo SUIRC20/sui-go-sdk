@@ -91,9 +91,9 @@ type SuiObjectResponseError struct {
 
 type ObjectOwner struct {
 	// the owner's Sui address
-	AddressOwner string      `json:"AddressOwner"`
-	ObjectOwner  string      `json:"ObjectOwner"`
-	Shared       ObjectShare `json:"Shared"`
+	AddressOwner string      `json:"AddressOwner,omitempty"`
+	ObjectOwner  string      `json:"ObjectOwner,omitempty"`
+	Shared       ObjectShare `json:"Shared,omitempty"`
 }
 
 type ObjectShare struct {
