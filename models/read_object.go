@@ -96,6 +96,35 @@ type ObjectOwner struct {
 	Shared       ObjectShare `json:"Shared,omitempty"`
 }
 
+func (b *ObjectOwner) UnmarshalJSON(data []byte) error {
+	var v map[string]interface{}
+	if string(data) == "\"Immutable\"" {
+		b.ObjectOwner = "Immutable"
+		b.AddressOwner = "Immutable"
+		b.Shared = ObjectShare{}
+		return nil
+	} else {
+		if err := json.Unmarshal(data, &v); err != nil {
+			return err
+		}
+		if v["AddressOwner"] != nil {
+			b.AddressOwner = v["AddressOwner"].(string)
+		}
+		if v["ObjectOwner"] != nil {
+			b.ObjectOwner = v["ObjectOwner"].(string)
+		}
+		if v["Shared"] != nil {
+			vty := v["Shared"].(map[string]interface{})
+			if vty["initial_shared_version"] != nil {
+				b.Shared = ObjectShare{
+					InitialSharedVersion: int(vty["initial_shared_version"].(float64)),
+				}
+			}
+		}
+	}
+	return nil
+}
+
 type ObjectShare struct {
 	InitialSharedVersion int `json:"initial_shared_version"`
 }
